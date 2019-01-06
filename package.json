@@ -1,6 +1,6 @@
 {
   "name": "puppet-pdf",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "create pdf documents using puppeteer",
   "main": "index.js",
   "scripts": {

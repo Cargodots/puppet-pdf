@@ -1,7 +1,7 @@
 const chromium = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer-core');
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event, context) => {
     let browser = null;
 
     try {
@@ -16,19 +16,20 @@ exports.handler = async (event, context, callback) => {
         if(event.url) {
             await page.goto(event.url);
             const result = event.options ? await page.pdf(event.options) : await page.pdf();
-            callback(null, result);
+            return context.succeed(result);
         } else if(event.html) {
             await page.setContent(event.html);
             const result = event.options ? await page.pdf(event.options) : await page.pdf();
-            callback(null, result);
+            return context.succeed(result);
         } else {
-            callback(Error("event.url or event.html is required"))
+            return context.fail(Error("event.url or event.html is required"));
         }
     } catch (error) {
-        return callback(error);
+        return context.fail(error);
     } finally {
         if (browser !== null) {
             await browser.close();
         }
     }
 };
+module.exports = exports.handler;
